@@ -1,0 +1,13 @@
+<launch>
+    <!--<arg name="fitting_params_file"  default="$(find fv_sensor)/script/fv_lib/fitting_param.yaml" />-->
+    <!--<arg name="animation" default="true" />-->
+
+    <node pkg="fv_sensor" type="fv_node.py" name="fv_l" respawn="False"
+          args="1 $(find fv_sensor)/scripts/fv_lib/fitting_param.yaml" output="screen">
+    </node>
+
+    <node pkg="fv_sensor" type="fv_node.py" name="fv_r" respawn="False"
+          args="2 $(find fv_sensor)/scripts/fv_lib/fitting_param.yaml" output="screen">
+    </node>
+
+</launch>
