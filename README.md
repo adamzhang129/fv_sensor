@@ -25,8 +25,19 @@ Required packages:
 - - -
 Beforce launch the whole thing, one need to check
 1. Connect sensors' usb to computer with an order of left to right, then check camera index with following script.
-```bash
-ls /dev/video*
-```
-2. connect Robotiq 2-finger gripper through UR controller box to computer under modbus protocol, then make sure you get through steps on this [site](http://wiki.ros.org/robotiq/Tutorials/Control%20of%20a%202-Finger%20Gripper%20using%20the%20Modbus%20RTU%20protocol%20%28ros%20kinetic%20and%20newer%20releases%29).
+  ```bash
+  ls /dev/video*
+  ```
+2. Connect Robotiq 2-finger gripper through UR controller box to computer under modbus protocol, then make sure you get through steps on this [site](http://wiki.ros.org/robotiq/Tutorials/Control%20of%20a%202-Finger%20Gripper%20using%20the%20Modbus%20RTU%20protocol%20%28ros%20kinetic%20and%20newer%20releases%29).
 
+3. Make sure you setup your local IP with same router for UR robot. You can setup your ip with
+  ```sh
+  sudo ifconfig [your ethernet module name] [ip_adress]
+  ```
+  
+
+- - -
+Launching steps:
+- Launch ur10 driver and visulization
+- Launch gripper base node and simple controller node
+- Launch fv_sensor nodes
