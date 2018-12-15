@@ -6,6 +6,7 @@ For full sensor development, one can refer to https://arxiv.org/abs/1810.02653, 
 
 - - -
 System setup:
+
   Software:
   - Ubuntu 14.04
   - python 2.7
@@ -18,7 +19,7 @@ System setup:
 
 - - -
 Required packages:
-  - (ur_modern_driver){https://github.com/ros-industrial/ur_modern_driver/tree/kinetic-devel]}
+  - (ur_modern_driver){https://github.com/ros-industrial/ur_modern_driver/tree/kinetic-devel}
   - (robotiq meta package)[https://github.com/ros-industrial/robotiq/tree/kinetic-devel]
   
 
