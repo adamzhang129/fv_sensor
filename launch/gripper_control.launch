@@ -1,0 +1,10 @@
+<launch>
+    <node pkg="fv_sensor" type="fv_tf_vis.py" name="fv_tf_and_visualization" respawn="False"
+          output="screen">
+    </node>
+
+    <node pkg="fv_sensor" type="gripper_force_control.py" name="gripper_force_controller" respawn="False"
+          output="screen">
+    </node>
+
+</launch>

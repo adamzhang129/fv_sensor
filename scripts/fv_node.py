@@ -19,13 +19,15 @@ import argparse
 import sys
 import signal
 
+# from scipy import signal as sciSig
+
 def signal_handler(signal, frame):
     print("\nprogram exiting...")
     sys.exit(0)
 
 
 def image_cvt2msg(img_dx, img_dy):
-    img = np.concatenate((img_dx, img_dy), axis=1)
+    img = np.concatenate((img_dx.T, img_dy.T), axis=1)
     img = (img + 30) * 256. / 60
 
     img_resized = cv2.resize(img, (0, 0), fx=4, fy=4, interpolation=cv2.INTER_NEAREST)
@@ -34,6 +36,26 @@ def image_cvt2msg(img_dx, img_dy):
     img_colorized = cv2.applyColorMap(img_resized, cv2.COLORMAP_JET)
 
     return img_colorized
+
+
+class FilterOrder1:
+    ''' http://techteach.no/simview/lowpass_filter/doc/filter_algorithm.pdf '''
+    def __init__(self, dim=4):
+        self.h = 1.0/15
+        self.Tf = self.h*4
+        self.alpha = self.h/(self.h + self.Tf)
+        
+        self.dim = dim
+        self.y = np.zeros((self.dim, 2), dtype=float)
+        
+    def filter(self, x):
+        self.y[:, 0] = self.y[:, 1]
+        
+        for i in range(self.dim):
+            self.y[i, 1] = (1.0 - self.alpha) * self.y[i, 0] + self.alpha * x[i]
+        
+        return self.y[:, 1]
+        
 
 
 
@@ -84,18 +106,31 @@ if __name__ == '__main__':
         rate = rospy.Rate(15)
 
         wrench_msg = WrenchStamped()
-
+        
+        filter = FilterOrder1(4)
+        
+        calib_data = []
+        bias_avg = 0.0
         while True:
-            fv.track(time_verbose=1)
+            fv.track(time_verbose=0)
             if fv.count > 1:
                 wrench = fv.wrench_estimate()
+                # =========calibrates -> removes bias==============
+                N = 30
+                if fv.count < N:
+                    calib_data.append(wrench)
+                elif fv.count == N:
+                    bias_avg = np.sum(calib_data, axis=0)/N
 
+                wrench_f = filter.filter(wrench) - bias_avg
+                # wrench_f = np.array(wrench) - bias_avg
+                
                 wrench_msg.header.stamp = rospy.Time.now()
-                wrench_msg.wrench.force.x = wrench[0]
-                wrench_msg.wrench.force.y = wrench[1]
-                wrench_msg.wrench.force.z = wrench[2]
-                wrench_msg.wrench.torque.z = wrench[3]
-
+                wrench_msg.wrench.force.x = -wrench_f[0]
+                wrench_msg.wrench.force.y = -wrench_f[1]
+                wrench_msg.wrench.force.z = wrench_f[2]
+                wrench_msg.wrench.torque.z = -wrench_f[3]
+                
                 pub.publish(wrench_msg)
 
                 # fetch disp field image (after interpolation) and publish
@@ -113,9 +148,6 @@ if __name__ == '__main__':
 
     except rospy.ROSInterruptException:
         pass
-
-
-
 
     fv.cap.release()
     cv2.destroyAllWindows()

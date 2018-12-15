@@ -83,8 +83,8 @@ class Fv:
         self.YY = self.Y.ravel()
 
         # decomposition object
-        dx = float(self.width) / (self.Nx - 1)
-        dy = float(self.height) / (self.Ny - 1)
+        dx = float(self.width - 2*x_i_min) / (self.Nx - 1)
+        dy = float(self.height - 2*y_i_min) / (self.Ny - 1)
         grid = (self.Nx, self.Ny)
 
         self.decomp_obj = nHHD(grid=grid, spacings=(dy, dx))
