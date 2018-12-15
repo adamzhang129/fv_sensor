@@ -19,7 +19,7 @@ System setup:
 
 - - -
 Required packages:
-  - [ur_modern_driver]{https://github.com/ros-industrial/ur_modern_driver/tree/kinetic-devel}
-  - (robotiq meta package)[https://github.com/ros-industrial/robotiq/tree/kinetic-devel]
+  - [ur_modern_driver](https://github.com/ros-industrial/ur_modern_driver/tree/kinetic-devel)
+  - [robotiq meta package](https://github.com/ros-industrial/robotiq/tree/kinetic-devel)
   
 
