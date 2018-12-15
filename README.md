@@ -37,7 +37,22 @@ Beforce launch the whole thing, one need to check
   
 
 - - -
-Launching steps:
+Launching steps (on my setup, you may need carefully adapt to your own environment):
 - Launch ur10 driver and visulization
+  ```sh
+  roslaunch ur_modern_driver ur10_bringup.launch  limited:=true robot_ip:=192.168.1.102
+  roslaunch ur10_moveit_config ur10_moveit_planning_execution.launch limited:=true
+  roslaunch ur10_moveit_config moveit_rviz.launch  config:=true
+  ```
 - Launch gripper base node and simple controller node
+  ```sh
+  rosrun robotiq_2f_gripper_control Robotiq2FGripperRtuNode.py /dev/ttyUSB1
+  rosrun robotiq_2f_gripper_control Robotiq2FGripperStatusListener.py
+  rosrun robotiq_2f_gripper_control Robotiq2FGripperSimpleController.py
+  ```
 - Launch fv_sensor nodes
+  ```sh
+  roslaunch fv_sensor fv_sensor.launch
+  ```
+
+
